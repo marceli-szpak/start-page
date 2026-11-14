@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Start</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2318181b'/%3E%3Crect x='7' y='7' width='8' height='8' rx='1.5' fill='%23e4e4e7'/%3E%3Crect x='17' y='7' width='8' height='8' rx='1.5' fill='%2371717a'/%3E%3Crect x='7' y='17' width='8' height='8' rx='1.5' fill='%2371717a'/%3E%3Crect x='17' y='17' width='8' height='8' rx='1.5' fill='%2371717a'/%3E%3C/svg%3E" />
+</head>
+<body>
+  <!-- Dynamic Wallpaper Layer -->
+  <div id="wallpaper-layer" class="wallpaper-layer" aria-hidden="true">
+    <div id="wallpaper-image" class="wallpaper-image"></div>
+    <div id="wallpaper-overlay" class="wallpaper-overlay"></div>
+  </div>
+
+  <!-- Minimalist Workspace Shell -->
+  <div class="app-shell">
+    <!-- Minimal Top Utility Bar -->
+    <header class="utility-bar">
+      <div class="utility-left">
+        <span id="wallpaper-credit-text" class="utility-meta">Unsplash</span>
+        <a id="wallpaper-credit-link" href="https://unsplash.com" target="_blank" rel="noopener noreferrer" class="utility-link">Source &nearr;</a>
+      </div>
+
+      <div class="utility-actions">
+        <button id="btn-lock-layout" class="minimal-btn" type="button" title="Lock or unlock panel moving and resizing">
+          <span id="lock-layout-label">Lock Layout</span>
+        </button>
+        <button id="btn-reset-layout" class="minimal-btn" type="button" title="Reset panel positions and sizes">
+          Reset Layout
+        </button>
+        <button id="btn-refresh-bg" class="minimal-btn" type="button" title="Next Unsplash wallpaper">
+          Next Photo
+        </button>
+        <button id="btn-open-settings" class="minimal-btn" type="button" title="Open settings">
+          Settings
+        </button>
+      </div>
+    </header>
+
+    <!-- Freeform Draggable & Resizable Panel Workspace -->
+    <main id="workspace" class="workspace">
+      <!-- PANEL 1: Clock & Date -->
+      <section class="panel" data-panel-id="clock" aria-label="Clock and Date">
+        <div class="panel-header" data-drag-handle>
+          <span class="panel-title">Time</span>
+          <span class="drag-grip" aria-hidden="true"></span>
+        </div>
+        <div class="panel-body clock-panel-body">
+          <div class="time-row">
+            <time id="clock-time" class="clock-time" datetime="">00:00</time>
+            <span id="clock-seconds" class="clock-seconds">00</span>
+            <span id="clock-ampm" class="clock-ampm" hidden>AM</span>
+          </div>
+          <div class="date-row">
+            <span id="clock-greeting" class="clock-greeting" hidden></span>
+            <time id="clock-date" class="clock-date" datetime="">Saturday, November 14</time>
+          </div>
+        </div>
+        <div class="resize-handle resize-e" data-resize="e"></div>
+        <div class="resize-handle resize-s" data-resize="s"></div>
+        <div class="resize-handle resize-se" data-resize="se" title="Drag to resize"></div>
+      </section>
+
+      <!-- PANEL 2: Webpage Shortcuts -->
+      <section class="panel" data-panel-id="shortcuts" aria-labelledby="shortcuts-heading">
+        <div class="panel-header" data-drag-handle>
+          <div class="panel-title-group">
+            <h2 id="shortcuts-heading" class="panel-title">Shortcuts</h2>
+          </div>
+          <div class="panel-controls" data-no-drag>
+            <div class="segmented-control" role="group" aria-label="Shortcut display mode">
+              <button type="button" class="seg-btn" data-shortcut-view="miniatures">Miniatures</button>
+              <button type="button" class="seg-btn" data-shortcut-view="icons">Icons</button>
+              <button type="button" class="seg-btn" data-shortcut-view="compact">List</button>
+            </div>
+            <button id="btn-toggle-edit-shortcuts" class="minimal-sm-btn" type="button" title="Toggle edit mode for shortcuts">
+              Edit
+            </button>
+            <button id="btn-add-shortcut" class="minimal-sm-btn primary" type="button">
+              + Add
+            </button>
+          </div>
+        </div>
+
+        <div class="panel-body shortcuts-panel-body">
+          <div id="shortcuts-grid" class="shortcuts-grid view-miniatures">
+            <!-- Populated by app.js -->
+          </div>
+        </div>
+        <div class="resize-handle resize-e" data-resize="e"></div>
+        <div class="resize-handle resize-s" data-resize="s"></div>
+        <div class="resize-handle resize-se" data-resize="se" title="Drag to resize"></div>
+      </section>
+
+      <!-- PANEL 3: Weather & Forecast -->
+      <section class="panel" data-panel-id="weather" aria-labelledby="weather-heading">
+        <div class="panel-header" data-drag-handle>
+          <div class="panel-title-group">
+            <h2 id="weather-heading" class="panel-title">Weather</h2>
+            <button id="btn-weather-location" class="text-action-btn" type="button" data-no-drag title="Change city">
+              <span id="weather-city-name">Warsaw</span>
+            </button>
+          </div>
+          <div class="panel-controls" data-no-drag>
+            <button id="btn-weather-unit" class="minimal-sm-btn" type="button" title="Toggle °C / °F">°C</button>
+            <button id="btn-weather-refresh" class="minimal-sm-btn" type="button" title="Refresh">↻</button>
+          </div>
+        </div>
+
+        <div class="panel-body weather-panel-body">
+          <form id="weather-search-form" class="inline-form" hidden data-no-drag>
+            <input id="weather-city-input" type="text" placeholder="City name..." autocomplete="off" />
+            <button type="submit" class="minimal-sm-btn primary">Set</button>
+            <button type="button" id="btn-weather-geo" class="minimal-sm-btn" title="Use current location">GPS</button>
+          </form>
+
+          <div class="weather-current">
+            <div class="weather-main-temp">
+              <span id="weather-temp" class="temp-value">--°</span>
+              <div class="weather-condition-stack">
+                <span id="weather-desc" class="weather-desc">Loading</span>
+                <span id="weather-hi-lo" class="weather-hi-lo">H: --°  L: --°</span>
+              </div>
+            </div>
+            <div id="weather-hero-icon" class="weather-hero-icon" aria-hidden="true"></div>
+          </div>
+
+          <div class="weather-metrics">
+            <div class="weather-metric-item">
+              <span class="metric-label">Humidity</span>
+              <span id="weather-humidity" class="metric-val">--%</span>
+            </div>
+            <div class="weather-metric-item">
+              <span class="metric-label">Wind</span>
+              <span id="weather-wind" class="metric-val">-- km/h</span>
+            </div>
+            <div class="weather-metric-item">
+              <span class="metric-label">Feels</span>
+              <span id="weather-feels" class="metric-val">--°</span>
+            </div>
+          </div>
+
+          <div id="weather-forecast" class="weather-forecast-strip"></div>
+        </div>
+        <div class="resize-handle resize-e" data-resize="e"></div>
+        <div class="resize-handle resize-s" data-resize="s"></div>
+        <div class="resize-handle resize-se" data-resize="se" title="Drag to resize"></div>
+      </section>
+
+      <!-- PANEL 4: Currency & History Chart -->
+      <section class="panel" data-panel-id="currency" aria-labelledby="currency-heading">
+        <div class="panel-header" data-drag-handle>
+          <div class="panel-title-group">
+            <h2 id="currency-heading" class="panel-title">Currency</h2>
+            <span id="currency-updated" class="subtle-meta">ECB</span>
+          </div>
+
+          <div class="panel-controls" data-no-drag>
+            <div class="pair-selector">
+              <select id="currency-base" class="minimal-select" aria-label="Base currency"></select>
+              <button id="btn-swap-currency" class="swap-btn" type="button" title="Swap pair">&harr;</button>
+              <select id="currency-target" class="minimal-select" aria-label="Target currency"></select>
+            </div>
+
+            <div class="segmented-control" role="group" aria-label="History timeframe">
+              <button type="button" class="seg-btn" data-fx-range="7">7D</button>
+              <button type="button" class="seg-btn active" data-fx-range="30">1M</button>
+              <button type="button" class="seg-btn" data-fx-range="90">3M</button>
+              <button type="button" class="seg-btn" data-fx-range="365">1Y</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-body currency-panel-body">
+          <div class="currency-summary-bar">
+            <div class="currency-rate-hero">
+              <div class="rate-headline">
+                <span id="fx-pair-label" class="fx-pair-label">1 EUR =</span>
+                <span id="fx-current-rate" class="fx-current-rate">--</span>
+                <span id="fx-change-badge" class="fx-change-badge neutral">0.00%</span>
+              </div>
+              <div class="fx-range-stats">
+                <span>L: <strong id="fx-stat-low">--</strong></span>
+                <span>H: <strong id="fx-stat-high">--</strong></span>
+                <span id="fx-hover-readout" class="fx-hover-readout"></span>
+              </div>
+            </div>
+
+            <div class="fx-converter-box" data-no-drag>
+              <label for="fx-amount-input" class="sr-only">Amount</label>
+              <input id="fx-amount-input" type="text" inputmode="decimal" value="100" autocomplete="off" class="fx-amount-input" />
+              <span id="fx-amount-base" class="fx-unit-tag">EUR</span>
+              <span class="fx-equals">=</span>
+              <output id="fx-converted-output" class="fx-converted-output">--</output>
+            </div>
+          </div>
+
+          <div class="chart-stage" id="fx-chart-stage" data-no-drag>
+            <svg id="fx-chart-svg" class="fx-chart-svg" viewBox="0 0 640 180" preserveAspectRatio="none" role="img" aria-label="Exchange rate history">
+              <defs>
+                <linearGradient id="fxAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.16" />
+                  <stop offset="100%" stop-color="var(--accent)" stop-opacity="0.0" />
+                </linearGradient>
+              </defs>
+              <g id="fx-grid-lines" class="fx-grid-lines"></g>
+              <path id="fx-area-path" fill="url(#fxAreaGrad)" d="" />
+              <path id="fx-line-path" fill="none" stroke="var(--accent)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" d="" />
+              <line id="fx-crosshair-line" class="fx-crosshair" x1="0" y1="0" x2="0" y2="180" hidden />
+              <circle id="fx-crosshair-dot" class="fx-crosshair-dot" cx="0" cy="0" r="3.5" hidden />
+            </svg>
+            <div id="fx-chart-labels" class="fx-chart-labels"></div>
+          </div>
+
+          <div id="fx-watchlist" class="fx-watchlist" data-no-drag></div>
+        </div>
+        <div class="resize-handle resize-e" data-resize="e"></div>
+        <div class="resize-handle resize-s" data-resize="s"></div>
+        <div class="resize-handle resize-se" data-resize="se" title="Drag to resize"></div>
+      </section>
+
+      <!-- PANEL 5: To-Do List -->
+      <section class="panel" data-panel-id="todo" aria-labelledby="todo-heading">
+        <div class="panel-header" data-drag-handle>
+          <div class="panel-title-group">
+            <h2 id="todo-heading" class="panel-title">To-Do</h2>
+            <span id="todo-counter" class="subtle-meta">0</span>
+          </div>
+          <div class="panel-controls" data-no-drag>
+            <div class="segmented-control" role="group" aria-label="Filter tasks">
+              <button type="button" class="seg-btn active" data-todo-filter="all">All</button>
+              <button type="button" class="seg-btn" data-todo-filter="active">Active</button>
+              <button type="button" class="seg-btn" data-todo-filter="done">Done</button>
+            </div>
+            <button id="btn-clear-done" class="minimal-sm-btn" type="button" title="Clear completed">Clear</button>
+          </div>
+        </div>
+
+        <div class="panel-body todo-panel-body">
+          <div class="todo-progress-track" aria-hidden="true">
+            <div id="todo-progress-fill" class="todo-progress-fill" style="width: 0%"></div>
+          </div>
+
+          <form id="todo-form" class="todo-form" data-no-drag>
+            <input id="todo-input" type="text" placeholder="New task..." maxlength="140" autocomplete="off" required />
+            <select id="todo-priority" class="minimal-select" aria-label="Priority">
+              <option value="normal">Normal</option>
+              <option value="high">High</option>
+              <option value="low">Low</option>
+            </select>
+            <button type="submit" class="minimal-sm-btn primary">Add</button>
+          </form>
+
+          <ul id="todo-list" class="todo-list" data-no-drag></ul>
+        </div>
+        <div class="resize-handle resize-e" data-resize="e"></div>
+        <div class="resize-handle resize-s" data-resize="s"></div>
+        <div class="resize-handle resize-se" data-resize="se" title="Drag to resize"></div>
+      </section>
+
+      <!-- PANEL 6: Project Kanban Board -->
+      <section class="panel" data-panel-id="kanban" aria-labelledby="kanban-heading">
+        <div class="panel-header" data-drag-handle>
+          <div class="panel-title-group">
+            <h2 id="kanban-heading" class="panel-title">Projects</h2>
+          </div>
+          <div class="panel-controls" data-no-drag>
+            <form id="kanban-add-col-form" class="kanban-col-form" hidden>
+              <input id="kanban-col-input" type="text" placeholder="Column name..." maxlength="28" autocomplete="off" />
+              <button type="submit" class="minimal-sm-btn primary">Create</button>
+            </form>
+            <button id="btn-kanban-add-col" class="minimal-sm-btn primary" type="button">+ Column</button>
+          </div>
+        </div>
+
+        <div class="panel-body kanban-panel-body" data-no-drag>
+          <div id="kanban-board" class="kanban-board">
+            <!-- Columns & Cards rendered by app.js -->
+          </div>
+        </div>
+        <div class="resize-handle resize-e" data-resize="e"></div>
+        <div class="resize-handle resize-s" data-resize="s"></div>
+        <div class="resize-handle resize-se" data-resize="se" title="Drag to resize"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- MODAL: Add / Edit Shortcut -->
+  <div id="shortcut-modal" class="modal-backdrop" hidden>
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="shortcut-modal-title">
+      <div class="modal-header">
+        <h3 id="shortcut-modal-title">Shortcut</h3>
+        <button type="button" class="minimal-sm-btn" data-close-modal="shortcut-modal">&times;</button>
+      </div>
+      <form id="shortcut-form" class="modal-form">
+        <input type="hidden" id="shortcut-id" />
+
+        <div class="form-field">
+          <label for="shortcut-title">Title</label>
+          <input id="shortcut-title" type="text" placeholder="GitHub" required maxlength="40" />
+        </div>
+
+        <div class="form-field">
+          <label for="shortcut-url">URL</label>
+          <input id="shortcut-url" type="text" placeholder="https://github.com" required />
+        </div>
+
+        <div class="form-field">
+          <label>Display Type</label>
+          <div class="radio-card-grid">
+            <label class="radio-card">
+              <input type="radio" name="shortcut-thumb-mode" value="auto-shot" checked />
+              <span class="radio-card-title">Miniature</span>
+              <span class="radio-card-desc">Site preview</span>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="shortcut-thumb-mode" value="favicon" />
+              <span class="radio-card-title">Icon</span>
+              <span class="radio-card-desc">Site favicon</span>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="shortcut-thumb-mode" value="custom" />
+              <span class="radio-card-title">Custom</span>
+              <span class="radio-card-desc">Image URL / text</span>
+            </label>
+          </div>
+        </div>
+
+        <div id="custom-thumb-field" class="form-field" hidden>
+          <label for="shortcut-custom-thumb">Image URL or Monogram</label>
+          <input id="shortcut-custom-thumb" type="text" placeholder="https://.../image.png or GH" />
+        </div>
+
+        <div class="form-field">
+          <label for="shortcut-color">Fallback Tint</label>
+          <div class="color-row">
+            <input id="shortcut-color" type="color" value="#3f3f46" />
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="minimal-btn" data-close-modal="shortcut-modal">Cancel</button>
+          <button type="submit" class="minimal-btn primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- DRAWER: Settings -->
+  <div id="settings-modal" class="modal-backdrop drawer-backdrop" hidden>
+    <aside class="settings-drawer" role="dialog" aria-modal="true" aria-labelledby="settings-drawer-title">
+      <div class="modal-header">
+        <h3 id="settings-drawer-title">Settings</h3>
+        <button type="button" class="minimal-sm-btn" data-close-modal="settings-modal">&times;</button>
+      </div>
+
+      <div class="drawer-body">
+        <!-- Visible Widgets Toggle Section -->
+        <section class="settings-section">
+          <h4 class="settings-section-title">Visible Widgets</h4>
+          <div class="toggle-grid" id="widget-visibility-toggles">
+            <label class="toggle-row">
+              <span>Time &amp; Date</span>
+              <input type="checkbox" data-toggle-widget="clock" checked />
+            </label>
+            <label class="toggle-row">
+              <span>Shortcuts</span>
+              <input type="checkbox" data-toggle-widget="shortcuts" checked />
+            </label>
+            <label class="toggle-row">
+              <span>Weather</span>
+              <input type="checkbox" data-toggle-widget="weather" checked />
+            </label>
+            <label class="toggle-row">
+              <span>Currency &amp; Chart</span>
+              <input type="checkbox" data-toggle-widget="currency" checked />
+            </label>
+            <label class="toggle-row">
+              <span>To-Do List</span>
+              <input type="checkbox" data-toggle-widget="todo" checked />
+            </label>
+            <label class="toggle-row">
+              <span>Projects Kanban Board</span>
+              <input type="checkbox" data-toggle-widget="kanban" checked />
+            </label>
+          </div>
+        </section>
+
+        <!-- Appearance & Colors -->
+        <section class="settings-section">
+          <h4 class="settings-section-title">Appearance</h4>
+
+          <div class="form-field">
+            <label>Surface</label>
+            <div class="theme-pills" id="theme-mode-selector">
+              <button type="button" class="theme-pill active" data-theme-val="dark">Charcoal</button>
+              <button type="button" class="theme-pill" data-theme-val="oled">Pure Black</button>
+              <button type="button" class="theme-pill" data-theme-val="midnight">Slate</button>
+              <button type="button" class="theme-pill" data-theme-val="light">Light</button>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label>Accent Color</label>
+            <div class="swatch-row" id="accent-swatch-row">
+              <button type="button" class="color-swatch active" data-accent="#e4e4e7" style="--sw:#e4e4e7" title="Neutral White"></button>
+              <button type="button" class="color-swatch" data-accent="#94a3b8" style="--sw:#94a3b8" title="Steel"></button>
+              <button type="button" class="color-swatch" data-accent="#10b981" style="--sw:#10b981" title="Emerald"></button>
+              <button type="button" class="color-swatch" data-accent="#38bdf8" style="--sw:#38bdf8" title="Sky"></button>
+              <button type="button" class="color-swatch" data-accent="#f59e0b" style="--sw:#f59e0b" title="Amber"></button>
+              <button type="button" class="color-swatch" data-accent="#f43f5e" style="--sw:#f43f5e" title="Rose"></button>
+              <label class="custom-color-picker" title="Custom Color">
+                <input type="color" id="custom-accent-input" value="#e4e4e7" />
+                <span>Custom</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="setting-glass-opacity">Panel Opacity (<span id="val-glass-opacity">78%</span>)</label>
+            <input id="setting-glass-opacity" type="range" min="30" max="98" value="78" />
+          </div>
+        </section>
+
+        <!-- Typography & Clock -->
+        <section class="settings-section">
+          <h4 class="settings-section-title">Typography &amp; Time</h4>
+
+          <div class="form-field">
+            <label for="setting-font-family">Font</label>
+            <select id="setting-font-family" class="minimal-select full-width">
+              <option value="inter">Inter (Sans)</option>
+              <option value="jakarta">Plus Jakarta Sans</option>
+              <option value="grotesk">Space Grotesk</option>
+              <option value="editorial">Instrument Serif</option>
+              <option value="mono">JetBrains Mono</option>
+            </select>
+          </div>
+
+          <div class="toggle-grid">
+            <label class="toggle-row">
+              <span>24-Hour Clock</span>
+              <input type="checkbox" id="setting-clock-24h" checked />
+            </label>
+            <label class="toggle-row">
+              <span>Show Seconds</span>
+              <input type="checkbox" id="setting-clock-seconds" checked />
+            </label>
+            <label class="toggle-row">
+              <span>Show Greeting</span>
+              <input type="checkbox" id="setting-show-greeting" />
+            </label>
+          </div>
+
+          <div class="form-field">
+            <label for="setting-user-name">Greeting Name (optional)</label>
+            <input id="setting-user-name" type="text" placeholder="Name" maxlength="30" />
+          </div>
+        </section>
+
+        <!-- Unsplash Backgrounds -->
+        <section class="settings-section">
+          <h4 class="settings-section-title">Unsplash Background</h4>
+
+          <div class="form-field">
+            <label for="setting-bg-topic">Collection</label>
+            <select id="setting-bg-topic" class="minimal-select full-width">
+              <option value="moody-nature">Mountains &amp; Fog</option>
+              <option value="architecture">Minimal Architecture</option>
+              <option value="night-city">Night City</option>
+              <option value="cosmos">Deep Space</option>
+              <option value="ocean">Dark Ocean</option>
+              <option value="abstract">Abstract</option>
+              <option value="custom-url">Custom URL</option>
+              <option value="none">Solid Minimal</option>
+            </select>
+          </div>
+
+          <div id="custom-bg-url-group" class="form-field" hidden>
+            <label for="setting-custom-bg-url">Image URL</label>
+            <div class="input-with-btn">
+              <input id="setting-custom-bg-url" type="url" placeholder="https://images.unsplash.com/..." />
+              <button type="button" id="btn-apply-custom-bg" class="minimal-sm-btn primary">Apply</button>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="setting-unsplash-key">Unsplash API Key (Optional)</label>
+            <input id="setting-unsplash-key" type="password" placeholder="Client-ID key" autocomplete="off" />
+          </div>
+
+          <div class="form-field">
+            <label for="setting-unsplash-query">Unsplash Search Query</label>
+            <div class="input-with-btn">
+              <input id="setting-unsplash-query" type="text" placeholder="e.g. brutalism, forest" />
+              <button type="button" id="btn-fetch-unsplash-live" class="minimal-sm-btn">Fetch</button>
+            </div>
+          </div>
+
+          <div class="two-col-sliders">
+            <div class="form-field">
+              <label for="setting-bg-dim">Dim (<span id="val-bg-dim">52%</span>)</label>
+              <input id="setting-bg-dim" type="range" min="10" max="90" value="52" />
+            </div>
+            <div class="form-field">
+              <label for="setting-bg-blur">Blur (<span id="val-bg-blur">0px</span>)</label>
+              <input id="setting-bg-blur" type="range" min="0" max="24" value="0" />
+            </div>
+          </div>
+        </section>
+
+        <!-- Grid & Currency -->
+        <section class="settings-section">
+          <h4 class="settings-section-title">Widget Options</h4>
+
+          <div class="form-field">
+            <label for="setting-shortcut-cols">Shortcut Columns</label>
+            <select id="setting-shortcut-cols" class="minimal-select full-width">
+              <option value="2">2 Columns</option>
+              <option value="3">3 Columns</option>
+              <option value="4" selected>4 Columns</option>
+              <option value="5">5 Columns</option>
+              <option value="6">6 Columns</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="setting-watchlist-pairs">Watchlist Pairs</label>
+            <input id="setting-watchlist-pairs" type="text" placeholder="EUR/USD, EUR/PLN, USD/PLN, GBP/EUR" />
+          </div>
+        </section>
+
+        <!-- Data Backup -->
+        <section class="settings-section">
+          <h4 class="settings-section-title">Data</h4>
+          <div class="backup-actions">
+            <button type="button" id="btn-export-data" class="minimal-btn">Export JSON</button>
+            <label class="minimal-btn">
+              <span>Import JSON</span>
+              <input type="file" id="input-import-data" accept="application/json" hidden />
+            </label>
+            <button type="button" id="btn-reset-defaults" class="minimal-btn danger">Reset All</button>
+          </div>
+        </section>
+      </div>
+    </aside>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
