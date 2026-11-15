@@ -8,6 +8,7 @@
   --accent: #e4e4e7;
   --accent-rgb: 228, 228, 231;
   --glass-opacity: 0.78;
+  --glass-blur: 20px;
   --bg-dim: 0.52;
   --bg-blur: 0px;
   --shortcut-cols: 4;
@@ -240,9 +241,9 @@ html[data-theme="light"] .wallpaper-overlay {
 .minimal-btn {
   padding: 5px 10px;
   border-radius: 6px;
-  background: rgba(var(--card-rgb), 0.65);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(var(--card-rgb), var(--glass-opacity));
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   border: 1px solid var(--border-subtle);
   color: var(--text-secondary);
   font-size: 11.5px;
@@ -316,8 +317,8 @@ html[data-theme="light"] .workspace.is-interacting {
 .panel {
   position: absolute;
   background: rgba(var(--card-rgb), var(--glass-opacity));
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   border: 1px solid var(--border-subtle);
   border-radius: 8px;
   display: flex;
@@ -1646,9 +1647,9 @@ body[data-font="editorial"] .clock-time {
 
 .settings-drawer {
   width: 100%;
-  max-width: 380px;
+  max-width: 420px;
   height: 100vh;
-  padding: 18px 20px;
+  padding: 20px 24px 20px 28px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -1663,6 +1664,10 @@ body[data-font="editorial"] .clock-time {
   justify-content: space-between;
 }
 
+.settings-drawer .modal-header {
+  padding: 0 16px 0 8px;
+}
+
 .modal-header h3 {
   font-size: 13px;
   font-weight: 600;
@@ -1673,10 +1678,11 @@ body[data-font="editorial"] .clock-time {
 .drawer-body {
   flex: 1;
   overflow-y: auto;
+  scrollbar-gutter: stable;
   display: flex;
   flex-direction: column;
   gap: 18px;
-  padding-right: 4px;
+  padding: 2px 16px 16px 8px;
 }
 
 .settings-section {
@@ -1844,6 +1850,7 @@ body[data-font="editorial"] .clock-time {
   align-items: center;
   justify-content: space-between;
   font-size: 12px;
+  padding: 2px 4px;
   cursor: pointer;
 }
 

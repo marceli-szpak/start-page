@@ -206,6 +206,7 @@
     theme: 'dark',
     accent: '#e4e4e7',
     glassOpacity: 78,
+    glassBlur: 20,
     font: 'inter',
     clock24h: true,
     clockSeconds: true,
@@ -609,9 +610,11 @@
     root.setAttribute('data-theme', state.theme || 'dark');
     document.body.setAttribute('data-font', state.font || 'inter');
 
+    const glassBlur = state.glassBlur !== undefined ? state.glassBlur : 20;
     root.style.setProperty('--accent', state.accent);
     root.style.setProperty('--accent-rgb', hexToRgbString(state.accent));
     root.style.setProperty('--glass-opacity', (state.glassOpacity / 100).toFixed(2));
+    root.style.setProperty('--glass-blur', `${glassBlur}px`);
     root.style.setProperty('--bg-dim', (state.bgDim / 100).toFixed(2));
     root.style.setProperty('--bg-blur', `${state.bgBlur}px`);
     root.style.setProperty('--shortcut-cols', String(state.shortcutCols || 4));
@@ -631,6 +634,11 @@
     const glassLabel = document.getElementById('val-glass-opacity');
     if (glassRange) glassRange.value = state.glassOpacity;
     if (glassLabel) glassLabel.textContent = `${state.glassOpacity}%`;
+
+    const glassBlurRange = document.getElementById('setting-glass-blur');
+    const glassBlurLabel = document.getElementById('val-glass-blur');
+    if (glassBlurRange) glassBlurRange.value = glassBlur;
+    if (glassBlurLabel) glassBlurLabel.textContent = `${glassBlur}px`;
 
     const fontSelect = document.getElementById('setting-font-family');
     if (fontSelect) fontSelect.value = state.font;
@@ -2469,6 +2477,12 @@
 
     document.getElementById('setting-glass-opacity')?.addEventListener('input', (e) => {
       state.glassOpacity = Number(e.target.value);
+      saveState();
+      applyThemeAndAppearance();
+    });
+
+    document.getElementById('setting-glass-blur')?.addEventListener('input', (e) => {
+      state.glassBlur = Number(e.target.value);
       saveState();
       applyThemeAndAppearance();
     });
